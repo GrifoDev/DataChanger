@@ -24,11 +24,11 @@
         android:enabled="false"/>
 
     <Button
-        android:text="Switch Data"
+        android:text="@string/btn1_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
-        android:id="@+id/btnchange" />
+        android:id="@+id/btnchangeData" />
 </RelativeLayout>
