@@ -11,23 +11,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.SyncFailedException;
+
 
 /**
  * Created by Lars on 15.02.2017.
  */
 
 public class FileHelper {
-    final static String filename = "file.txt";
-    final static String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/dc/";
+    final static String filename = "others.xml";
+    final static String path = (Environment.getRootDirectory().getAbsolutePath() + "/csc/");
     final static String TAG = FileHelper.class.getName();
 
     public static String ReadFile ( Context context) {
         String line = null;
 
         try {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            FileInputStream fileInputStream = new FileInputStream(new File(dir, filename));
+            Process p;
+            p = Runtime.getRuntime().exec("su");
+
+            FileInputStream fileInputStream = new FileInputStream(new File(path, filename));
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
@@ -46,21 +48,37 @@ public class FileHelper {
         return line;
     }
 
-    public static boolean saveToFile (String data) {
-        try {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File file = new File(dir, filename);
-            if (!file.exists()) {
-                file.createNewFile();
+    public static String investInput (String input) {
+
+        if (!input.contains("<CscFeature_SystemUI_ConfigOverrideDataIcon>")) {
+            //Add parameter
+            try {
+                Process su, mount;
+                File file = new File(path, filename);
+
+                su = Runtime.getRuntime().exec("su");
+                mount = Runtime.getRuntime().exec("mount -o rw,remount /system");
+                FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+                fileOutputStream.write(("<CscFeature_SystemUI_ConfigOverrideDataIcon>4G</CscFeature_SystemUI_ConfigOverrideDataIcon>" + System.getProperty("line.separator")).getBytes());
+
+                return "4G";
+            }catch (FileNotFoundException ex) {
+                Log.d(TAG, ex.getMessage());
+            }catch (IOException ex) {
+                Log.d(TAG, ex.getMessage());
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-            fileOutputStream.write((data + System.getProperty("line.separator")).getBytes());
-            return true;
-        }catch (FileNotFoundException ex) {
-            Log.d(TAG, ex.getMessage());
-        }catch (IOException ex) {
-            Log.d(TAG, ex.getMessage());
+
+        } else {
+            //Read its value
+            if(input.contains("<CscFeature_SystemUI_ConfigOverrideDataIcon>LTE</CscFeature_SystemUI_ConfigOverrideDataIcon>")) {
+                return "LTE";
+            }
+            else if (input.contains("<CscFeature_SystemUI_ConfigOverrideDataIcon>4G</CscFeature_SystemUI_ConfigOverrideDataIcon>")) {
+                return "4G";
+            }
+
+
         }
-        return false;
+        return "Nothing";
     }
 }

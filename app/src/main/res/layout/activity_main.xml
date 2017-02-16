@@ -11,13 +11,20 @@
     tools:context="com.android.misterevo.datachanger.MainActivity">
 
     <Button
-        android:text="@string/btn1_name"
+        android:text="Savefile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
         android:id="@+id/btnchangeData" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewOutput"
+        android:layout_alignParentTop="true" />
 
     <Button
         android:text="ReadFile"
@@ -26,25 +33,22 @@
         android:id="@+id/readFile"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/btnchangeData"
-        android:layout_alignStart="@+id/btnchangeData"/>
+        android:layout_alignStart="@+id/btnchangeData"
+        android:layout_alignRight="@+id/btnchangeData"
+        android:layout_alignEnd="@+id/btnchangeData" />
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:text="Name"
         android:ems="10"
+        android:id="@+id/editTextInput"
+        android:singleLine="false"
+        android:selectAllOnFocus="true"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.EditText"
         android:layout_above="@+id/btnchangeData"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="42dp"
-        android:id="@+id/editTextInput" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewOutout"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="23dp" />
+        android:layout_marginBottom="21dp" />
 
 </RelativeLayout>
