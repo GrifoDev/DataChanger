@@ -97,6 +97,7 @@ public class FileHelper {
                 return "4G";
             }catch (FileNotFoundException ex) {
                 Log.d(TAG, ex.getMessage());
+                return ex.getMessage();
             }catch (IOException ex) {
                 Log.d(TAG, ex.getMessage());
             }
