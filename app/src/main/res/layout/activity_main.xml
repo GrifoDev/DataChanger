@@ -10,45 +10,38 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.android.misterevo.datachanger.MainActivity">
 
-    <Button
-        android:text="Savefile"
+    <ScrollView
+        android:id="@+id/tvScroller"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="63dp"
-        android:id="@+id/btnchangeData" />
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_above="@+id/btnReadFile">
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewOutput"
-        android:layout_alignParentTop="true" />
-
+        android:layout_above="@id/btnReadFile"
+        android:id="@+id/tvCSC"
+        android:layout_alignParentTop="true"
+        android:scrollHorizontally="false" />
+        </ScrollView>
     <Button
         android:text="ReadFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/readFile"
+        android:id="@+id/btnReadFile"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/btnchangeData"
-        android:layout_alignStart="@+id/btnchangeData"
-        android:layout_alignRight="@+id/btnchangeData"
-        android:layout_alignEnd="@+id/btnchangeData" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <EditText
+    <Button
+        android:text="Savefile"
         android:layout_width="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editTextInput"
-        android:singleLine="false"
-        android:selectAllOnFocus="true"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.EditText"
-        android:layout_above="@+id/btnchangeData"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="21dp" />
+        android:id="@+id/btnSaveFile"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
