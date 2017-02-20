@@ -15,33 +15,27 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:layout_above="@+id/btnReadFile">
+        android:layout_above="@+id/swtdata">
 
     <TextView
-        android:text="TextView"
+        android:text="Loading file... Please wait"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btnReadFile"
+        android:layout_above="@id/swtdata"
         android:id="@+id/tvCSC"
         android:layout_alignParentTop="true"
         android:scrollHorizontally="false" />
         </ScrollView>
-    <Button
-        android:text="ReadFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnReadFile"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="Savefile"
+    <Switch
+        android:text="DataIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSaveFile"
+        android:textOff="4G"
+        android:textOn="LTE"
+        android:showText="true"
+        android:id="@+id/swtdata"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
