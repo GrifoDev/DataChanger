@@ -29,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERM_READ_EXT = 111;
     private static final int PERM_WRITE_EXT = 222;
     private final String TEMP_FILE_NAME = ".other_temp.xml";
-    private final String cmdRT = "cat /system/csc/others.xml > " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + TEMP_FILE_NAME + "\n";
-    private final String cmdTR = "cat " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + TEMP_FILE_NAME + " > /system/csc/others.xml\n";
+    private final String cmdRT = "cat /system/csc/others.xml > " + Environment.getExternalStorageDirectory() + "/.tmp/" + TEMP_FILE_NAME + "\n";
+    private final String cmdTR = "cat " +Environment.getExternalStorageDirectory() + "/.tmp/" + TEMP_FILE_NAME + " > /system/csc/others.xml\n";
     private String result;
-    private final File tempFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + TEMP_FILE_NAME);
+    private final File tempFile = new File(Environment.getExternalStorageDirectory() + "/.tmp/" + TEMP_FILE_NAME);
+    File direct = new File(Environment.getExternalStorageDirectory() + "/.tmp");
     Process p;
 
     @Override
@@ -62,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             //Permissions is ok
+
+
+            if(!direct.exists())
+            {
+               direct.mkdir(); //directory is created;
+
+            }
 
             FileHelper.copyFileToTemp(cmdRT, p);
             Runnable r = new Runnable() {
@@ -98,26 +106,26 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Changed to LTE", Toast.LENGTH_SHORT).show();
                         Output.setText(result);
 
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Reboot phone")
-                                .setMessage("You need to reboot your device to apply changes.\n Do you want to reboot?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            p = Runtime.getRuntime().exec("reboot");
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                })
-                                .show();
+//                        new AlertDialog.Builder(MainActivity.this)
+//                                .setTitle("Reboot phone")
+//                                .setMessage("You need to reboot your device to apply changes.\n Do you want to reboot?")
+//                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        try {
+//                                            p = Runtime.getRuntime().exec("reboot");
+//                                        } catch (IOException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                })
+//                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+//                                .show();
 
 
                     } else {
@@ -127,26 +135,26 @@ public class MainActivity extends AppCompatActivity {
                         FileHelper.copyFileToRoot(cmdTR, p);
                         Toast.makeText(MainActivity.this, "Changed to 4G", Toast.LENGTH_SHORT).show();
                         Output.setText(result);
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Reboot phone")
-                                .setMessage("You need to reboot your device to apply changes.\n Do you want to reboot?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            p = Runtime.getRuntime().exec("reboot");
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                })
-                                .show();
+//                        new AlertDialog.Builder(MainActivity.this)
+//                                .setTitle("Reboot phone")
+//                                .setMessage("You need to reboot your device to apply changes.\n Do you want to reboot?")
+//                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        try {
+//                                            p = Runtime.getRuntime().exec("reboot");
+//                                        } catch (IOException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                })
+//                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+//                                .show();
 
                     }
                 }
@@ -161,6 +169,11 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERM_READ_EXT: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(!direct.exists())
+                    {
+                        direct.mkdir(); //directory is created;
+
+                    }
                     FileHelper.copyFileToTemp(cmdRT, p);
                     Runnable r = new Runnable() {
                         @Override
