@@ -170,8 +170,7 @@ public class FileHelper {
             fileOutputStream.flush();
             fileOutputStream.close();
 
-            //When my code is added, the icon will be 4G
-            return "4G";
+            return "File Saved";
         }catch (FileNotFoundException ex) {
             Log.d(TAG, ex.getMessage());
             return ex.getMessage();

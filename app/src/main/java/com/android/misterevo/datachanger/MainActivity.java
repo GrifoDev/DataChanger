@@ -9,8 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     //Getting interface
-    Button btnWrite;
     TextView Output;
     Switch swtData;
     private static final int PERM_READ_EXT = 111;
@@ -39,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Connect elements
-        btnWrite = (Button) findViewById(R.id.btnSaveFile);
         Output = (TextView) findViewById(R.id.tvCSC);
         swtData = (Switch) findViewById(R.id.swtdata);
 
@@ -87,12 +83,14 @@ public class MainActivity extends AppCompatActivity {
                     FileHelper.saveFile(Result, tempFile);
                     cmd = "cat /sdcard/download/" + TEMP_FILE_NAME+ " > /system/csc/others.xml\n";
                     FileHelper.copyFileToRoot(cmd);
+                    Toast.makeText(MainActivity.this, "Changed to 4G", Toast.LENGTH_SHORT);
                 }else {
                     Result = FileHelper.readFile(tempFile);
                     Result = Result.replace("<CscFeature_SystemUI_ConfigOverrideDataIcon>LTE</CscFeature_SystemUI_ConfigOverrideDataIcon>", "<CscFeature_SystemUI_ConfigOverrideDataIcon>4G</CscFeature_SystemUI_ConfigOverrideDataIcon>");
                     FileHelper.saveFile(Result, tempFile);
                     cmd = "cat /sdcard/download/" + TEMP_FILE_NAME+ " > /system/csc/others.xml\n";
                     FileHelper.copyFileToRoot(cmd);
+                    Toast.makeText(MainActivity.this, "Changed to LTE", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -101,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
