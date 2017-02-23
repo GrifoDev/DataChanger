@@ -31,8 +31,22 @@
         android:textOn="LTE"
         android:showText="true"
         android:id="@+id/swtdata"
+        tools:ignore="UnusedAttribute"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        tools:ignore="UnusedAttribute" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Switch
+        android:text="DataIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="RCS vis"
+        android:textOn="RCS invis"
+        android:showText="true"
+        android:id="@+id/swtrcs"
+        tools:ignore="UnusedAttribute"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -112,14 +112,6 @@ public class FileHelper {
 
     }
 
-    public static boolean Toggled(String input) {
-        if (input.contains("<CscFeature_SystemUI_ConfigOverrideDataIcon>LTE</CscFeature_SystemUI_ConfigOverrideDataIcon>")) {
-            return true;
-        } else if (input.contains("<CscFeature_SystemUI_ConfigOverrideDataIcon>4G</CscFeature_SystemUI_ConfigOverrideDataIcon>")) {
-            return false;
-        }
-        return false;
-    }
 
     public static void saveFile(String input, File tempFile) {
         try {

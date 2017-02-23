@@ -4,6 +4,7 @@ package com.android.misterevo.datachanger;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Getting interface
     private TextView Output;
-    private Switch swtData;
+    private Switch swtData, swtRCS;
     private static final int PERM_READ_EXT = 111;
     private static final int PERM_WRITE_EXT = 222;
     private final String TEMP_FILE_NAME = ".other_temp.xml";
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //Connect elements
         Output = (TextView) findViewById(R.id.tvCSC);
         swtData = (Switch) findViewById(R.id.swtdata);
+        swtRCS = (Switch) findViewById(R.id.swtrcs);
 
         //Acquire Permissions
         final int permissionsCheckRead = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -70,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
                direct.mkdir(); //directory is created;
 
             }
+            //Read switch state
+            SharedPreferences shardPrefs = getSharedPreferences("com.misterevo.datachanger", MODE_PRIVATE);
+            swtData.setChecked(shardPrefs.getBoolean("DataIcon", true));
+            swtRCS.setChecked(shardPrefs.getBoolean("RCS", false));
+
+
+
 
             FileHelper.copyFileToTemp(cmdRT, p);
             Runnable r = new Runnable() {
@@ -80,12 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     Output.setText(result);
                     FileHelper.copyFileToRoot(cmdTR, p);
                     //Check if LTE is toggled
-                    if (FileHelper.Toggled(Output.getText().toString())) {
-                        swtData.setChecked(true);
 
-                    } else {
-                        swtData.setChecked(false);
-                    }
                 }
             };
             Handler h = new Handler();
@@ -105,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
                         FileHelper.copyFileToRoot(cmdTR, p);
                         Toast.makeText(MainActivity.this, "Changed to LTE", Toast.LENGTH_SHORT).show();
                         Output.setText(result);
+                        SharedPreferences.Editor editor = getSharedPreferences("com.misterevo.datachanger", MODE_PRIVATE).edit();
+                        editor.putBoolean("DataIcon", true);
+                        editor.commit();
+
 
 //                        new AlertDialog.Builder(MainActivity.this)
 //                                .setTitle("Reboot phone")
@@ -135,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
                         FileHelper.copyFileToRoot(cmdTR, p);
                         Toast.makeText(MainActivity.this, "Changed to 4G", Toast.LENGTH_SHORT).show();
                         Output.setText(result);
+                        SharedPreferences.Editor editor = getSharedPreferences("com.misterevo.datachanger", MODE_PRIVATE).edit();
+                        editor.putBoolean("DataIcon", false);
+                        editor.commit();
+
 //                        new AlertDialog.Builder(MainActivity.this)
 //                                .setTitle("Reboot phone")
 //                                .setMessage("You need to reboot your device to apply changes.\n Do you want to reboot?")
@@ -161,6 +174,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        swtRCS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked) {
+                   //Bak to APK
+
+                    try {
+                        DataOutputStream outs = new DataOutputStream(p.getOutputStream());
+                        outs.writeBytes("mount -o rw,remount /system\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.apk /system/priv-app/imsservice/imsservice.tmp\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.bak /system/priv-app/imsservice/imsservice.apk\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.tmp /system/priv-app/imsservice/imsservice.bak\n");
+                        outs.writeBytes("mount -o ro,remount /system\n");
+                        outs.flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    SharedPreferences.Editor editor = getSharedPreferences("com.misterevo.datachanger", MODE_PRIVATE).edit();
+                    editor.putBoolean("RCS", true);
+                    editor.commit();
+
+                } else {
+                    try {
+                        DataOutputStream outs = new DataOutputStream(p.getOutputStream());
+                        outs.writeBytes("mount -o rw,remount /system\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.apk /system/priv-app/imsservice/imsservice.tmp\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.bak /system/priv-app/imsservice/imsservice.apk\n");
+                        outs.writeBytes("mv /system/priv-app/imsservice/imsservice.tmp /system/priv-app/imsservice/imsservice.bak\n");
+                        outs.writeBytes("mount -o ro,remount /system\n");
+                        outs.flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    SharedPreferences.Editor editor = getSharedPreferences("com.misterevo.datachanger", MODE_PRIVATE).edit();
+                    editor.putBoolean("RCS", false);
+                    editor.commit();
+
+                }
+
+            }
+        });
+
+
 
     }
 
@@ -179,13 +239,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Output.setText(FileHelper.readFile(tempFile));
-                            //Check if LTE is toggled
-                            if (FileHelper.Toggled(Output.getText().toString())) {
-                                swtData.setChecked(true);
 
-                            } else {
-                                swtData.setChecked(false);
-                            }
                         }
                     };
                     Handler h = new Handler();
